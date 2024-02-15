@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  --primary-color: #000000;
+  --secondary-color: #fff;
+  --hover-color: #595959;
+  --arrow-width: 10px;
+  --arrow-stroke: 2px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 20px;
+  color: var(--secondary-color);
+  padding: 1em 1.8em;
+  background: var(--primary-color);
+  transition: 0.2s background;
+  gap: 0.6em;
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: var(--hover-color);
+}

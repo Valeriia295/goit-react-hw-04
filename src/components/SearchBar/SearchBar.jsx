@@ -1,4 +1,6 @@
 import toast from 'react-hot-toast';
+import { RiSearchEyeLine } from 'react-icons/ri';
+import css from './SearchBar.module.css';
 
 export default function SearchBar({ onSearch }) {
   const handleSubmit = evt => {
@@ -15,15 +17,18 @@ export default function SearchBar({ onSearch }) {
 
   return (
     <header>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={css.form}>
         <input
+          className={css.input}
           type="text"
           name="query"
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
         />
-        <button type="submit">Search</button>
+        <button className={css.button} type="submit">
+          <RiSearchEyeLine size="17px" className={css.icon} />
+        </button>
       </form>
     </header>
   );

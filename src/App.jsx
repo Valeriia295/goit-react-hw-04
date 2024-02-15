@@ -1,7 +1,7 @@
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageGallery from './components/ImageGallery/ImageGallery';
-import ImageModal from './components/ImageModal/ImageModal';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import Loader from './components/Loader/Loader';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -36,6 +36,10 @@ export default function App() {
         setError(false);
         const fetchedData = await fetchImages(query.split('/')[1], page);
         setImages(prevImages => [...prevImages, ...fetchedData.results]);
+        if (fetchedData.results.length === 0) {
+          toast.error('No pictures or photos were found');
+          return;
+        }
       } catch (error) {
         setError(true);
       } finally {
@@ -49,12 +53,12 @@ export default function App() {
   return (
     <>
       <SearchBar onSearch={searchImages} />
-      {loading && <Loader />}
-      {error && <ErrorMessage />}
+      {error && <ErrorMessage onError={setError} />}
       {images.length > 0 && <ImageGallery items={images} />}
-      <ImageModal />
-      <LoadMoreBtn onLoadMore={handleLoadMore} />
-      <Toaster position="bottom-center" />
+      {loading && <Loader />}
+      {images.length > 0 && !loading && <LoadMoreBtn onLoadMore={handleLoadMore} />}
+
+      <Toaster position="top-center" />
     </>
   );
 }
