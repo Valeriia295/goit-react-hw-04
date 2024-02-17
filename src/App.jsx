@@ -14,6 +14,7 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [loadMoreImages, setLoadMoreImages] = useState(true);
 
   const searchImages = async newQuery => {
     setQuery(`${Date.now()}/${newQuery}`);
@@ -26,6 +27,8 @@ export default function App() {
   };
 
   useEffect(() => {
+    const perPage = 12;
+
     if (query === '') {
       return;
     }
@@ -34,14 +37,18 @@ export default function App() {
       try {
         setLoading(true);
         setError(false);
-        const fetchedData = await fetchImages(query.split('/')[1], page);
+        const fetchedData = await fetchImages(query.split('/')[1], page, perPage);
         setImages(prevImages => [...prevImages, ...fetchedData.results]);
+        setLoadMoreImages(fetchedData.results.length === perPage);
+
         if (fetchedData.results.length === 0) {
           toast.error('No pictures or photos were found');
+          setLoadMoreImages(false);
           return;
         }
       } catch (error) {
         setError(true);
+        setLoadMoreImages(false);
       } finally {
         setLoading(false);
       }
@@ -56,7 +63,9 @@ export default function App() {
       {error && <ErrorMessage onError={setError} />}
       {images.length > 0 && <ImageGallery items={images} />}
       {loading && <Loader />}
-      {images.length > 0 && !loading && <LoadMoreBtn onLoadMore={handleLoadMore} />}
+      {images.length > 0 && !loading && loadMoreImages && (
+        <LoadMoreBtn onLoadMore={handleLoadMore} />
+      )}
 
       <Toaster position="top-center" />
     </>
